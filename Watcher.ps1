@@ -10,7 +10,7 @@ $watcher.NotifyFilter = [System.IO.NotifyFilters]::LastWrite -bor [System.IO.Not
 
 $watch_filter = [System.IO.WatcherChangeTypes]::Changed -bor [System.IO.WatcherChangeTypes]::Renamed -bOr [System.IO.WatcherChangeTypes]::Created -bOr [System.IO.WatcherChangeTypes]::Deleted
 
-(Get-Host).UI.RawUI.WindowTitle = "PoshNUnit"
+(Get-Host).UI.RawUI.WindowTitle = "PoshMSpec"
 Write-Host "Watching $watchPath for changes. Press [ctrl]-C to exit"
 
 $ignore = (".svn", ".suo", ".user", "_resharper", ".cache", "\bin\", "\obj\") #todo: push out to a config file

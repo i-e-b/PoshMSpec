@@ -24,20 +24,35 @@ if (-not (Test-Path $results)) {
 
 Write-Host "Reading results: " -NoNewline
 ## TODO: update this for MSpec output structure
-$tests = Select-Xml -Path "$results" -Xpath '//test-case' | %{ $_.Node }
+$concerns = Select-Xml -Path "$results" -XPath '//concern' | %{ $_.Node }
+
 $passed = 0
 $failed = 0
 $other = 0
-$tests | %{
-	if ($_.success -eq "True") {$passed++}
-	elseif ($_.success -eq "False") {$failed++}
-	else {$other++}
+$failure_paths = ""
+$inconclusive_paths = ""
+
+$concerns | %{
+	$concern = $_.name
+	$_.context | %{
+		$context = $_.name
+		$_.specification | %{
+			$spec = $_.name
+			if ($_.status -eq "passed") {$passed++}
+			elseif ($_.status -eq "failed") {
+				$failed++
+				$failure_paths += "$context $concern, $spec`r`n" # the reversal of context and concern name seems to read more clearly.
+			} else {
+				$other++
+				$inconclusive_paths += "$context $concern, $spec`r`n"
+			}
+		}
+	}
 }
+
 Write-Host "$passed tests passed " -fo green -NoNewline
 if ($other -gt 0) {Write-Host "$other inconclusive or ignored " -fo yellow -NoNewline}
 if ($failed -gt 0) {Write-Host "$failed failed " -fo red -NoNewLine}
 Write-Host ";"
-$tests | %{ if ($_.success -eq "False") {
-	Write-Host $_.name -fo red
-}}
-
+Write-Host $failure_paths -fo red -NoNewline
+Write-Host $inconclusive_paths -fo yellow -NoNewline
