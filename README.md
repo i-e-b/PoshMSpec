@@ -1,2 +1,2 @@
-Automated MSpec test runner
-
+A build trigger and MSpec runner using Powershell and MSBuild.
+When running, monitors a directory for file changes. Finds and build the VisualStudio solution related for the file and runs MSpec tests against tests.
