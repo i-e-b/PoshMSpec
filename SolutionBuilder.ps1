@@ -19,9 +19,11 @@ function BuildToDirectory($slnFile, $targetDirectory) {
 	& $ms_build "$slnFile" /p:OutDir="$targetDirectory\" | out-null
 	if ($LASTEXITCODE -ne 0) {
 		Write-Host "Build FAILED" -fo red
+		(Get-Host).UI.RawUI.WindowTitle = "Build FAIL"
 		exit 1
 	} else {
 		Write-Host "Build OK" -fo green
+		(Get-Host).UI.RawUI.WindowTitle = "Build OK"
 	}
 }
 
@@ -38,6 +40,7 @@ function FindNearestSolution($src) {
 		if ($matchCount -gt 1) {throw "More than one solution at $trace"}
 	} catch {
 		Write-Host "Could not find a solution to build" -fo red
+		(Get-Host).UI.RawUI.WindowTitle = "No sln found"
 		return
 	}
 	"$trace\$match"

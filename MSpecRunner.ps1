@@ -19,6 +19,7 @@ popd
 
 if (-not (Test-Path $results)) {
 	Write-Host "No test results found" -fo yellow
+	(Get-Host).UI.RawUI.WindowTitle = "No tests?"
 	return
 }
 
@@ -49,6 +50,8 @@ $concerns | %{
 		}
 	}
 }
+
+(Get-Host).UI.RawUI.WindowTitle = "P$passed, I$other, F$failed"
 
 Write-Host "$passed tests passed " -fo green -NoNewline
 if ($other -gt 0) {Write-Host "$other inconclusive or ignored " -fo yellow -NoNewline}
