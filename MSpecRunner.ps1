@@ -1,6 +1,6 @@
 param(
 	$buildDirectory = $(throw "build results directory must be provided"),
-	$testAssmPattern = "*Behaviours.dll" # replace with *.dll to test everything -- this is quite slow!
+	$testAssmPattern = "*Acceptance.Tests.dll" # replace with *.dll to test everything -- this is quite slow!
 )
 # Test against all the dlls we can find, report any failures.
 #todo: configurable pattern for test assemblies?
@@ -8,6 +8,7 @@ param(
 $script_dir = Split-Path -parent $MyInvocation.MyCommand.Definition
 $mspec = "$script_dir/bin/mspec-clr4.exe"
 $results = "$buildDirectory\_PoshNUnit_Results.xml"
+echo $results
 
 $dlls = ls -Filter $testAssmPattern -Path $buildDirectory
 
